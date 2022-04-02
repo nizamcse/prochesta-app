@@ -11,9 +11,9 @@ const {
 
 const index = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit)
-    const skip = parseInt(req.query.offset)
-    const query = req.query.search
+    const limit = parseInt(req.query.limit) || 100
+    const skip = parseInt(req.query.offset) || 0
+    const query = req.query.search || ''
     const totalMatch = await getTotalMatch(query)
     const branches = await getAllBranches(query, skip, limit)
     return res.status(200).json({

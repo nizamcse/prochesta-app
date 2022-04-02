@@ -1,13 +1,11 @@
 const Branch = require('../models/branch')
 
 const getAllBranches = (q, s, l) => {
-  return Branch.find()
-    .exec()
-    .then((branches) => {
-      return res.status(200).json({
-          branches: branches,
-        })
-    })
+  return Branch.aggregate([
+    { $match: { name: { $regex: q, $options: 'i' } } },
+    { $skip: s },
+    { $limit: l }
+  ])
 }
 const getTotalMatch = (q) => {
   return Branch.aggregate([
