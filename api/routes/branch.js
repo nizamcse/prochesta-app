@@ -6,7 +6,7 @@ const {
   updateOne,
   deleteOne,
   findOne
-} = require('../controllers/branchController')
+} = require('../controllers/branch-controller')
 
 router.get('/', index)
 

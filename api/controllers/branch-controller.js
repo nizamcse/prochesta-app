@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 const {
-  getAllSubjects,
+  getAllBranches,
   getTotalMatch,
-  storeSubject,
+  storeBranch,
   findById,
   doesItExist,
-  updateOneSubject,
-  deleteSubject
-} = require('../services/SubjectService')
+  updateOneBranch,
+  deleteBranch
+} = require('../services/BranchService')
 
 const index = async (req, res) => {
   try {
@@ -15,9 +15,9 @@ const index = async (req, res) => {
     const skip = parseInt(req.query.offset)
     const query = req.query.search
     const totalMatch = await getTotalMatch(query)
-    const subjects = await getAllSubjects(query, skip, limit)
+    const branches = await getAllBranches(query, skip, limit)
     return res.status(200).json({
-      results: subjects,
+      results: branches,
       total: totalMatch[0] && totalMatch[0].total ? totalMatch[0].total : 0
     })
   } catch (e) {
@@ -32,17 +32,17 @@ const store = async (req, res) => {
     name: req.body.name
   }
   try {
-    const doesSubjectExist = await doesItExist(req)
-    if (doesSubjectExist) {
+    const doesBranchExist = await doesItExist(req)
+    if (doesBranchExist) {
       return res.status(409).json({
-        message: 'Subject already exist'
+        message: 'Branch already exist'
       })
     }
-    const subject = await storeSubject(data)
-    console.log('Subject from controller', subject)
-    return res.status(201).json({
-      results: subject,
-      message: 'Successfully created subject'
+    const branch = await storeBranch(data)
+    console.log('Branch from controller', branch)
+    return res.status(200).json({
+      results: branch,
+      message: 'Successfully created branch'
     })
   } catch (e) {
     if (e.message.indexOf('duplicate key error') !== -1)
@@ -76,17 +76,16 @@ const updateOne = async (req, res) => {
   const id = req.params.id
 
   try {
-    const doesSubjectExist = await doesItExist(req, 1)
-    if (doesSubjectExist) {
+    const doesBranchExist = await doesItExist(req, 1)
+    if (doesBranchExist) {
       return res.status(409).json({
-        message: 'Subject already exist'
+        message: 'Branch already exist'
       })
     }
-    const subject = await updateOneSubject(id, data)
+    const branch = await updateOneBranch(id, data)
     return res.status(200).json({
-      results: subject,
-      message: 'Successfully updated subject',
-      l: req.query
+      results: branch,
+      message: 'Successfully updated branch',
     })
   } catch (e) {
     if (e.message.indexOf('duplicate key error') !== -1)
@@ -116,14 +115,14 @@ const updateOne = async (req, res) => {
 const deleteOne = async (req, res) => {
   const id = req.params.id
   try {
-    const result = await deleteSubject(id)
+    const result = await deleteBranch(id)
     if (result.deletedCount === 0)
       return res.status(200).json({
         message: 'Record could not found.',
         results: result
       })
     return res.status(200).json({
-      message: 'Subject deleted successfully',
+      message: 'Branch deleted successfully',
       results: result
     })
   } catch (e) {
@@ -136,9 +135,9 @@ const deleteOne = async (req, res) => {
 const findOne = async (req, res) => {
   const id = req.params.id
   try {
-    const subject = await findById(id)
+    const branch = await findById(id)
     return res.status(200).json({
-      results: subject
+      results: branch
     })
   } catch (e) {
     return res.status(e.statusCode || 500).json({
