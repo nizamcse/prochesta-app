@@ -32,7 +32,7 @@ router.post('/login', (req, res, next) => {
                 })
               }
               else {
-                  return res.status(403).send({success: false, msg: 'Authentication failed, wrong password'})
+                  return res.status(403).json({success: false, msg: 'Authentication failed, wrong password'})
               }
           })
       }

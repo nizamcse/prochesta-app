@@ -7,6 +7,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const userRoutes = require('./api/routes/user')
 const loginRoute = require('./api/routes/login')
+const branchRoute = require('./api/routes/branch')
 app.use(morgan('dev'))
 app.use(cors())
 app.use(express.static('public'))
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 app.set('env', 'production')
 app.use('/api', loginRoute)
 app.use('/api/user',auth, userRoutes)
+app.use('/api/branches',auth, branchRoute)
 
 
 app.use((req, resp, next) => {
