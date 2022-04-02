@@ -7,7 +7,7 @@ const {
   doesItExist,
   updateOneBranch,
   deleteBranch
-} = require('../services/BranchService')
+} = require('../services/branch-service')
 
 const index = async (req, res) => {
   try {
