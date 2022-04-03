@@ -39,7 +39,6 @@ const store = async (req, res) => {
       })
     }
     const branch = await storeBranch(data)
-    console.log('Branch from controller', branch)
     return res.status(200).json({
       results: branch,
       message: 'Successfully created branch'

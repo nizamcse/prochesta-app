@@ -51,7 +51,8 @@ const firstOrCreate = (q) => {
 }
 
 const updateOneBranch = (id, data) => {
-  return Branch.updateOne({ _id: id }, { ...data })
+  Branch.updateOne({ _id: id }, { ...data })
+  return getById(id);
 }
 
 const getById = (id) => {
