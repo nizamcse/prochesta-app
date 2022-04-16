@@ -42,7 +42,7 @@ const store = async (req, res) => {
     const center = await storeCenter(data)
     const getCenter = await findById(center._id);
     return res.status(200).json({
-      results: getCenter,
+      results: getCenter[0] || null,
       message: 'Successfully created center'
     })
   } catch (e) {
