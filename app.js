@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.set('env', 'production')
 app.use('/api', loginRoute)
 app.use('/api/user',auth, userRoutes)
-app.use('/api/branches',auth, branchRoute)
+app.use('/api/branches', branchRoute)
 
 
 app.use((req, resp, next) => {
