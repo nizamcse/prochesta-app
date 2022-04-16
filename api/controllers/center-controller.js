@@ -30,8 +30,9 @@ const store = async (req, res) => {
   const data = {
     _id: mongoose.Types.ObjectId(),
     name: req.body.name,
-    center: req.body.center
+    branch: req.body.branch
   }
+  console.log(data,req.body)
   try {
     const doesCenterExist = await doesItExist(req)
     if (doesCenterExist) {
@@ -72,7 +73,7 @@ const store = async (req, res) => {
 const updateOne = async (req, res) => {
   const data = {
     name: req.body.name,
-    center: req.body.center
+    branch: req.body.branch
   }
   const id = req.params.id
 
