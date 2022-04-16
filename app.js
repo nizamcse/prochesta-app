@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const userRoutes = require('./api/routes/user')
 const loginRoute = require('./api/routes/login')
 const branchRoute = require('./api/routes/branch')
+const centerRoute = require('./api/routes/center')
 app.use(morgan('dev'))
 app.use(cors())
 app.use(express.static('public'))
@@ -31,6 +32,7 @@ app.set('env', 'production')
 app.use('/api', loginRoute)
 app.use('/api/user',auth, userRoutes)
 app.use('/api/branches', branchRoute)
+app.use('/api/centers', centerRoute)
 
 
 app.use((req, resp, next) => {
