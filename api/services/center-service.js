@@ -73,7 +73,7 @@ const deleteCenter = (id) => {
 }
 
 const findById = async (id) =>  {
-    const centers = await Center.aggregate([
+    return Center.aggregate([
     { $match: { _id: ObjectId(id) } },
     {
       $lookup: {
@@ -85,7 +85,6 @@ const findById = async (id) =>  {
     },
     { $unwind : "$branch" },
   ]);
-  return centers[0] || null;
 }
 
 module.exports = {

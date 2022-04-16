@@ -40,7 +40,7 @@ const store = async (req, res) => {
       })
     }
     const center = await storeCenter(data)
-    const getCenter = findById(center_id);
+    const getCenter = await findById(center._id);
     return res.status(200).json({
       results: getCenter,
       message: 'Successfully created center'
