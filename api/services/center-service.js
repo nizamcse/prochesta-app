@@ -11,6 +11,7 @@ const getAllCenters = (q, s, l) => {
         as: 'branch'
       }
     },
+    { $unwind : "$branch" },
     { $skip: s },
     { $limit: l }
   ])
