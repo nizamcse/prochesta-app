@@ -32,7 +32,6 @@ const store = async (req, res) => {
     name: req.body.name,
     branch: req.body.branch
   }
-  console.log(data,req.body)
   try {
     const doesCenterExist = await doesItExist(req)
     if (doesCenterExist) {
@@ -41,8 +40,9 @@ const store = async (req, res) => {
       })
     }
     const center = await storeCenter(data)
+    const getCenter = findById(center_id);
     return res.status(200).json({
-      results: center,
+      results: getCenter,
       message: 'Successfully created center'
     })
   } catch (e) {
