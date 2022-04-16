@@ -1,5 +1,6 @@
 const Center = require('../models/center')
-
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId;
 const getAllCenters = (q, s, l) => {
   return Center.aggregate([
     { $match: { name: { $regex: q, $options: 'i' } } },
@@ -71,8 +72,20 @@ const deleteCenter = (id) => {
   return Center.remove({ _id: id })
 }
 
-const findById = (id) => {
-  return Center.findById(id)
+const findById = async (id) =>  {
+    const centers = await Center.aggregate([
+    { $match: { _id: ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'branches',
+        localField: 'branch',
+        foreignField: '_id',
+        as: 'branch'
+      }
+    },
+    { $unwind : "$branch" },
+  ]);
+  return centers[0] || null;
 }
 
 module.exports = {
