@@ -7,7 +7,7 @@ const {
   updateOne,
   deleteOne,
   findOne,
-} = require("../controllers/branch-controller");
+} = require("../controllers/employee-controller");
 
 router.get("/", index);
 

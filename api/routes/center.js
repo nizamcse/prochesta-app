@@ -1,21 +1,22 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+
+const router = express.Router();
 const {
   index,
   store,
   updateOne,
   deleteOne,
-  findOne
-} = require('../controllers/center-controller')
+  findOne,
+} = require("../controllers/center-controller");
 
-router.get('/', index)
+router.get("/", index);
 
-router.post('/', store)
+router.post("/", store);
 
-router.get('/:id', findOne)
+router.get("/:id", findOne);
 
-router.patch('/:id', updateOne)
+router.patch("/:id", updateOne);
 
-router.delete('/:id', deleteOne)
+router.delete("/:id", deleteOne);
 
-module.exports = router
+module.exports = router;
