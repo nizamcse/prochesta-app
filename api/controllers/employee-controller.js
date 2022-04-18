@@ -141,7 +141,7 @@ const findOne = async (req, res) => {
   try {
     const employee = await findById(id);
     return res.status(200).json({
-      results: employee,
+      results: employee[0],
     });
   } catch (e) {
     return res.status(e.statusCode || 500).json({
