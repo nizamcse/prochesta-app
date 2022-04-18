@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const Employee = require("../models/employee");
 
-const getAllEmployees = (q, s, l, b) => {
-  if (b) {
+const { ObjectId } = mongoose.Types;
+const getAllEmployees = (q, s, l) => {
+  if (q) {
     return Employee.aggregate([
-      { $match: { branch: mongoose.Types.ObjectId(b) } },
+      { $match: { branch: ObjectId(q) } },
       {
         $lookup: {
           from: "branches",
@@ -19,7 +20,6 @@ const getAllEmployees = (q, s, l, b) => {
     ]);
   }
   return Employee.aggregate([
-    { $match: { branch: mongoose.Types.ObjectId(b) } },
     {
       $lookup: {
         from: "branches",
@@ -33,17 +33,14 @@ const getAllEmployees = (q, s, l, b) => {
     { $limit: l },
   ]);
 };
-const getTotalMatch = (q, b) => {
-  if (b) {
+const getTotalMatch = (q) => {
+  if (q) {
     return Employee.aggregate([
-      { $match: { branch: mongoose.Types.ObjectId(b) } },
+      { $match: { branch: ObjectId(q) } },
       { $count: "total" },
     ]);
   }
-  return Employee.aggregate([
-    { $match: { name: { $regex: q, $options: "i" } } },
-    { $count: "total" },
-  ]);
+  return Employee.aggregate([{ $count: "total" }]);
 };
 
 const storeEmployee = (data) => {
@@ -58,7 +55,19 @@ const getById = (id) => Employee.findById(id);
 
 const deleteEmployee = (id) => Employee.remove({ _id: id });
 
-const findById = (id) => Employee.findById(id);
+const findById = async (id) =>
+  Employee.aggregate([
+    { $match: { _id: ObjectId(id) } },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "branch",
+        foreignField: "_id",
+        as: "branch",
+      },
+    },
+    { $unwind: "$branch" },
+  ]);
 
 module.exports = {
   getTotalMatch,
