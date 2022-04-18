@@ -6,13 +6,6 @@ const employeeSchema = mongoose.Schema({
     type: String,
     minlength: [3, "Center name should be minimum 3 character."],
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    match:
-      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-  },
   phone: {
     type: String,
     minlength: [3, "Center name should be minimum 3 character."],
@@ -20,6 +13,10 @@ const employeeSchema = mongoose.Schema({
   nid: {
     type: String,
     minlength: [3, "Center name should be minimum 3 character."],
+  },
+  dob: {
+    type: String,
+    required: false,
   },
   branch: {
     type: mongoose.Schema.Types.ObjectId,

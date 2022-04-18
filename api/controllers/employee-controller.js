@@ -58,7 +58,6 @@ const store = async (req, res) => {
     _id: mongoose.Types.ObjectId(),
     name: req.body.name,
     branch: req.body.branch,
-    email: req.body.email,
     phone: req.body.phone,
     nid: req.body.nid,
   };
@@ -80,7 +79,6 @@ const updateOne = async (req, res) => {
   const data = {
     name: req.body.name,
     branch: req.body.branch,
-    email: req.body.email,
     phone: req.body.phone,
     nid: req.body.nid,
   };
