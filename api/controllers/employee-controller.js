@@ -70,10 +70,9 @@ const store = async (req, res) => {
     );
     if (u) {
       const employee = await storeEmployee(data);
-      console.log("Employee", employee);
       const getEmployee = await findById(employee._id);
       return res.status(200).json({
-        results: getEmployee || null,
+        results: getEmployee[0] || null,
         message: "Successfully created employee",
       });
     }
