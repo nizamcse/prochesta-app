@@ -7,6 +7,7 @@ const {
   findById,
   doesItExist,
   deleteCenter,
+  updateOneCenter,
 } = require("../services/center-service");
 
 const index = async (req, res) => {
@@ -83,10 +84,11 @@ const updateOne = async (req, res) => {
         message: "Center already exist",
       });
     }
+    await updateOneCenter(id, data);
     const center = await findById(id);
     return res.status(200).json({
-      results: center[0] || null,
-      message: "Successfully updated center",
+      results: center,
+      message: "কেন্দ্রটি সম্পাদন করা হয়েছে।",
     });
   } catch (e) {
     if (e.message.indexOf("duplicate key error") !== -1)

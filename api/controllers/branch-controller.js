@@ -7,6 +7,7 @@ const {
   findById,
   doesItExist,
   deleteBranch,
+  updateOneBranch,
 } = require("../services/branch-service");
 
 const index = async (req, res) => {
@@ -80,6 +81,7 @@ const updateOne = async (req, res) => {
         message: "Branch already exist",
       });
     }
+    await updateOneBranch(id, data);
     const branch = await findById(id);
     return res.status(200).json({
       results: branch,

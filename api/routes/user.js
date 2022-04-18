@@ -22,27 +22,25 @@ router.post("/signup", (req, res) => {
         return res.status(409).json({
           message: "User already exist",
         });
-      } else {
-        const user = new User({
-          _id: mongoose.Types.ObjectId(),
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password,
-        });
-        user
-          .save()
-          .then((result) => {
-            console.log(result);
-            res.status(201).json({
-              message: "Successfully created user.",
-            });
-          })
-          .catch((err) =>
-            res.status(500).json({
-              error: err,
-            })
-          );
       }
+      const newUser = new User({
+        _id: mongoose.Types.ObjectId(),
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+      });
+      newUser
+        .save()
+        .then(() => {
+          res.status(201).json({
+            message: "Successfully created user.",
+          });
+        })
+        .catch((err) =>
+          res.status(500).json({
+            error: err,
+          })
+        );
     })
     .catch((err) =>
       res.status(500).json({

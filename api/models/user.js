@@ -13,12 +13,18 @@ const userSchema = mongoose.Schema(
       match:
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
     },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
+    type: {
+      type: String,
+      enum: ["ADMIN", "USER"],
+      required: true,
+      default: "USER",
+    },
   },
   { timestamps: true }
 );
 
-userSchema.pre("save", (next) => {
+userSchema.pre("save", function (next) {
   const user = this;
   if (this.isModified("password") || this.isNew) {
     bcrypt.genSalt(saltRounds, (err) => {
@@ -46,9 +52,4 @@ userSchema.methods.comparePassword = (passw, cb) => {
   });
 };
 
-userSchema.methods.toJSON = () => {
-  const obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
 module.exports = mongoose.model("User", userSchema);
