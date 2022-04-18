@@ -96,7 +96,7 @@ const updateOne = async (req, res) => {
     await updateOneEmployee(id, data);
     const employee = await findById(id);
     return res.status(200).json({
-      results: employee,
+      results: employee[0] || {},
       message: "Successfully updated employee",
       _id: id,
     });
