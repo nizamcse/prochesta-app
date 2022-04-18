@@ -63,19 +63,12 @@ const store = async (req, res) => {
     nid: req.body.nid,
   };
   try {
-    const u = await createUser(
-      req.body.name,
-      req.body.email,
-      req.body.password
-    );
-    if (u) {
-      const employee = await storeEmployee(data);
-      const getEmployee = await findById(employee._id);
-      return res.status(200).json({
-        results: getEmployee[0] || null,
-        message: "Successfully created employee",
-      });
-    }
+    const employee = await storeEmployee(data);
+    const getEmployee = await findById(employee._id);
+    return res.status(200).json({
+      results: getEmployee[0] || null,
+      message: "Successfully created employee",
+    });
   } catch (e) {
     return res.status(500).json({
       message: e,
