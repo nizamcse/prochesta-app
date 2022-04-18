@@ -15,8 +15,16 @@ const index = async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 1000;
     const skip = parseInt(req.query.offset, 10) || 0;
     const query = req.query.search || "";
-    const totalMatch = await getTotalMatch(query);
-    const employeees = await getAllEmployees(query, skip, limit);
+    const branch = req.query.branch || null;
+    let employeees = [];
+    let totalMatch = 0;
+    if (branch) {
+      employeees = await getAllEmployees(query, skip, limit, branch);
+      totalMatch = await getTotalMatch(query, branch);
+    } else {
+      totalMatch = await getTotalMatch(query);
+      employeees = await getAllEmployees(query, skip, limit);
+    }
     return res.status(200).json({
       results: employeees,
       total: totalMatch[0] && totalMatch[0].total ? totalMatch[0].total : 0,

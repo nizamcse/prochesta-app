@@ -1,8 +1,25 @@
+const mongoose = require("mongoose");
 const Employee = require("../models/employee");
 
-const getAllEmployees = (q, s, l) =>
-  Employee.aggregate([
-    { $match: { name: { $regex: q, $options: "i" } } },
+const getAllEmployees = (q, s, l, b) => {
+  if (b) {
+    return Employee.aggregate([
+      { $match: { branch: mongoose.Types.ObjectId(b) } },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "branch",
+          foreignField: "_id",
+          as: "branch",
+        },
+      },
+      { $unwind: "$branch" },
+      { $skip: s },
+      { $limit: l },
+    ]);
+  }
+  return Employee.aggregate([
+    { $match: { branch: mongoose.Types.ObjectId(b) } },
     {
       $lookup: {
         from: "branches",
@@ -15,11 +32,19 @@ const getAllEmployees = (q, s, l) =>
     { $skip: s },
     { $limit: l },
   ]);
-const getTotalMatch = (q) =>
-  Employee.aggregate([
+};
+const getTotalMatch = (q, b) => {
+  if (b) {
+    return Employee.aggregate([
+      { $match: { branch: mongoose.Types.ObjectId(b) } },
+      { $count: "total" },
+    ]);
+  }
+  return Employee.aggregate([
     { $match: { name: { $regex: q, $options: "i" } } },
     { $count: "total" },
   ]);
+};
 
 const storeEmployee = (data) => {
   const employee = new Employee(data);
