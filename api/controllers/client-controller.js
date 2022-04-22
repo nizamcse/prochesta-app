@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 const mongoose = require("mongoose");
+
 const {
-  getAllEmployees,
+  getAllClients,
   getTotalMatch,
-  storeEmployee,
+  storeClient,
   findById,
-  deleteEmployee,
-  updateOneEmployee,
-} = require("../services/employee-service");
+  deleteClient,
+  updateOneClient,
+} = require("../services/client-service");
 
 const index = async (req, res) => {
   try {
@@ -15,13 +16,15 @@ const index = async (req, res) => {
     const skip = parseInt(req.query.offset, 10) || 0;
     const branch = req.query.branch || "";
     const totalMatch = await getTotalMatch(branch);
-    const employeees = await getAllEmployees(branch, skip, limit);
+    const clientes = await getAllClients(branch, skip, limit);
     return res.status(200).json({
-      results: employeees,
+      results: clientes,
       total: totalMatch[0] && totalMatch[0].total ? totalMatch[0].total : 0,
     });
   } catch (e) {
-    return res.status(500).json(e);
+    return res.status(500).json({
+      message: e,
+    });
   }
 };
 
@@ -30,16 +33,21 @@ const store = async (req, res) => {
     _id: mongoose.Types.ObjectId(),
     name: req.body.name,
     branch: req.body.branch,
+    center: req.body.center,
     phone: req.body.phone,
     nid: req.body.nid,
     dob: req.body.dob,
+    father_name: req.body.fatherName,
+    mother_name: req.body.motherName,
+    present_address: req.body.presentAddress,
+    permanent_address: req.body.permanentAddress,
   };
   try {
-    const employee = await storeEmployee(data);
-    const getEmployee = await findById(employee.id);
+    const client = await storeClient(data);
+    const getClient = await findById(client.id);
     return res.status(200).json({
-      results: getEmployee[0] || null,
-      message: "Successfully created employee",
+      results: getClient[0] || null,
+      message: "Successfully created client",
     });
   } catch (e) {
     return res.status(500).json({
@@ -55,14 +63,18 @@ const updateOne = async (req, res) => {
     phone: req.body.phone,
     nid: req.body.nid,
     dob: req.body.dob,
+    father_name: req.body.fatherName,
+    mother_name: req.body.motherName,
+    present_address: req.body.presentAddress,
+    permanent_address: req.body.permanentAddress,
   };
   const { id } = req.params;
   try {
-    await updateOneEmployee(id, data);
-    const employee = await findById(id);
+    await updateOneClient(id, data);
+    const client = await findById(id);
     return res.status(200).json({
-      results: employee[0] || {},
-      message: "Successfully updated employee",
+      results: client[0] || {},
+      message: "Successfully updated client",
       _id: id,
     });
   } catch (e) {
@@ -93,14 +105,14 @@ const updateOne = async (req, res) => {
 const deleteOne = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await deleteEmployee(id);
+    const result = await deleteClient(id);
     if (result.deletedCount === 0)
       return res.status(200).json({
         message: "Record could not found.",
         results: result,
       });
     return res.status(200).json({
-      message: "Employee deleted successfully",
+      message: "Client deleted successfully",
       results: result,
     });
   } catch (e) {
@@ -113,9 +125,9 @@ const deleteOne = async (req, res) => {
 const findOne = async (req, res) => {
   const { id } = req.params;
   try {
-    const employee = await findById(id);
+    const client = await findById(id);
     return res.status(200).json({
-      results: employee[0],
+      results: client[0],
     });
   } catch (e) {
     return res.status(e.statusCode || 500).json({
@@ -123,5 +135,9 @@ const findOne = async (req, res) => {
     });
   }
 };
+
+/**
+ https://drive.google.com/uc?id=12SRDZInmm4DYiPkG_dNi_cKsDOkLcPv5&export=download
+ */
 
 module.exports = { index, store, updateOne, deleteOne, findOne };
