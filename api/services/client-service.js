@@ -41,13 +41,32 @@ const getAllClients = (q, s, l) => {
   return Client.aggregate([
     {
       $lookup: {
+        from: "centers",
+        localField: "center",
+        foreignField: "_id",
+        as: "center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
         from: "branches",
         localField: "branch",
         foreignField: "_id",
-        as: "branch",
+        as: "center.branch",
       },
     },
-    { $unwind: "$branch" },
+    {
+      $unwind: {
+        path: "$center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
     { $skip: s },
     { $limit: l },
   ]);
