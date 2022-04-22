@@ -7,6 +7,7 @@ const {
   findById,
   deleteEmployee,
   updateOneEmployee,
+  getById,
 } = require("../services/employee-service");
 const User = require("../models/user");
 
@@ -60,7 +61,7 @@ const store = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob || null,
+    dob: req.body.dob,
   };
   try {
     const employee = await storeEmployee(data);
@@ -82,7 +83,7 @@ const updateOne = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob || null,
+    dob: req.body.dob,
   };
   const { id } = req.params;
   try {

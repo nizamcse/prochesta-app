@@ -16,7 +16,8 @@ const employeeSchema = mongoose.Schema({
   },
   dob: {
     type: Date,
-    required: false,
+    required: true,
+    default: new Date("01-01-1970"),
   },
   branch: {
     type: mongoose.Schema.Types.ObjectId,
