@@ -68,10 +68,7 @@ const storeClient = (data) => {
 };
 
 const updateOneClient = (id, data) =>
-{
-  console.log(data);
-  return Client.updateOne({ _id: id }, { ...data });
-}
+  Client.updateOne({ _id: id }, { ...data });
 
 const getById = (id) => Client.findById(id);
 
