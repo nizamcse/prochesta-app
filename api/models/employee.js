@@ -15,7 +15,7 @@ const employeeSchema = mongoose.Schema({
     minlength: [3, "Center name should be minimum 3 character."],
   },
   dob: {
-    type: String,
+    type: Date,
     required: false,
   },
   branch: {

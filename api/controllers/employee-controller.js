@@ -60,10 +60,11 @@ const store = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
+    dob: req.body.dob || null,
   };
   try {
     const employee = await storeEmployee(data);
-    const getEmployee = await findById(employee._id);
+    const getEmployee = await findById(employee.id);
     return res.status(200).json({
       results: getEmployee[0] || null,
       message: "Successfully created employee",
@@ -81,6 +82,7 @@ const updateOne = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
+    dob: req.body.dob || null,
   };
   const { id } = req.params;
   try {
