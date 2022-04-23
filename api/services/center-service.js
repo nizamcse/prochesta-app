@@ -2,9 +2,24 @@ const mongoose = require("mongoose");
 const Center = require("../models/center");
 
 const { ObjectId } = mongoose.Types;
-const getAllCenters = (q, s, l) =>
-  Center.aggregate([
-    { $match: { name: { $regex: q, $options: "i" } } },
+const getAllCenters = (q, s, l) => {
+  if (q) {
+    return Center.aggregate([
+      { $match: { branch: ObjectId(q) } },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "branch",
+          foreignField: "_id",
+          as: "branch",
+        },
+      },
+      { $unwind: "$branch" },
+      { $skip: s },
+      { $limit: l },
+    ]);
+  }
+  return Center.aggregate([
     {
       $lookup: {
         from: "branches",
@@ -17,6 +32,7 @@ const getAllCenters = (q, s, l) =>
     { $skip: s },
     { $limit: l },
   ]);
+};
 const getTotalMatch = (q) =>
   Center.aggregate([
     { $match: { name: { $regex: q, $options: "i" } } },
