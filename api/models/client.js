@@ -45,6 +45,10 @@ const clientSchema = mongoose.Schema({
     type: mongoose.Schema.Types.String,
     required: false,
   },
+  phone: {
+    type: String,
+    minlength: [3, "Center name should be minimum 3 character."],
+  },
 });
 
 module.exports = mongoose.model("Client", clientSchema);
