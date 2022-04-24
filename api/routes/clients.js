@@ -14,6 +14,7 @@ const {
   updateOne,
   deleteOne,
   findOne,
+  searchClient,
 } = require("../controllers/client-controller");
 
 router.get("/", index);
@@ -99,5 +100,7 @@ router.post("/upload/client/avatar/:id", async (req, res) => {
     }
   });
 });
+
+router.get("/search/:query", searchClient);
 
 module.exports = router;

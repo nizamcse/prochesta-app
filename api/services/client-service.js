@@ -126,6 +126,47 @@ const findById = async (id) =>
     },
   ]);
 
+const search = async (q) =>
+  Client.aggregate([
+    {
+      $match: {
+        $or: [
+          { name: { $regex: `${q}`, $options: "i" } },
+          { nid: { $regex: `${q}`, $options: "i" } },
+          { phone: { $regex: `${q}`, $options: "i" } },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "centers",
+        localField: "center",
+        foreignField: "_id",
+        as: "center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "branch",
+        foreignField: "_id",
+        as: "center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+  ]);
+
 module.exports = {
   getTotalMatch,
   getAllClients,
@@ -134,4 +175,5 @@ module.exports = {
   updateOneClient,
   getById,
   deleteClient,
+  search,
 };

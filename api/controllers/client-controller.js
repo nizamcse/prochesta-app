@@ -8,6 +8,7 @@ const {
   findById,
   deleteClient,
   updateOneClient,
+  search,
 } = require("../services/client-service");
 
 const index = async (req, res) => {
@@ -136,8 +137,22 @@ const findOne = async (req, res) => {
   }
 };
 
+const searchClient = async (req, res) => {
+  const { query } = req.params;
+  try {
+    const clients = await search(query);
+    return res.status(200).json({
+      results: clients,
+    });
+  } catch (e) {
+    return res.status(e.statusCode || 500).json({
+      message: e.message,
+    });
+  }
+};
+
 /**
  https://drive.google.com/uc?id=12SRDZInmm4DYiPkG_dNi_cKsDOkLcPv5&export=download
  */
 
-module.exports = { index, store, updateOne, deleteOne, findOne };
+module.exports = { index, store, updateOne, deleteOne, findOne, searchClient };
