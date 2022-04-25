@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const Loan = require("../models/loan");
+const Deposit = require("../models/deposit");
 const Client = require("../models/client");
 
 const { ObjectId } = mongoose.Types;
-const getAllLoans = (q, s, l) => {
+const getAllDeposits = (q, s, l) => {
   if (q) {
-    return Loan.aggregate([
+    return Deposit.aggregate([
       { $match: { branch: ObjectId(q) } },
       {
         $lookup: {
@@ -32,20 +32,6 @@ const getAllLoans = (q, s, l) => {
       {
         $unwind: {
           path: "$nominee",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $lookup: {
-          from: "clients",
-          localField: "granter",
-          foreignField: "_id",
-          as: "granter",
-        },
-      },
-      {
-        $unwind: {
-          path: "$granter",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -81,7 +67,7 @@ const getAllLoans = (q, s, l) => {
       { $limit: l },
     ]);
   }
-  return Loan.aggregate([
+  return Deposit.aggregate([
     {
       $lookup: {
         from: "clients",
@@ -107,20 +93,6 @@ const getAllLoans = (q, s, l) => {
     {
       $unwind: {
         path: "$nominee",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: "clients",
-        localField: "granter",
-        foreignField: "_id",
-        as: "granter",
-      },
-    },
-    {
-      $unwind: {
-        path: "$granter",
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -157,9 +129,9 @@ const getAllLoans = (q, s, l) => {
   ]);
 };
 
-const listAllLoans = (q, s, l) => {
+const listAllDeposits = (q, s, l) => {
   if (q) {
-    return Loan.aggregate([
+    return Deposit.aggregate([
       { $match: { branch: ObjectId(q) } },
       {
         $lookup: {
@@ -186,20 +158,6 @@ const listAllLoans = (q, s, l) => {
       {
         $unwind: {
           path: "$nominee",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $lookup: {
-          from: "clients",
-          localField: "granter",
-          foreignField: "_id",
-          as: "granter",
-        },
-      },
-      {
-        $unwind: {
-          path: "$granter",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -237,24 +195,12 @@ const listAllLoans = (q, s, l) => {
         $project: {
           _id: 1,
           "client.name": 1,
-          "granter.name": 1,
-          "nominee.name": 1,
-          "center.name": 1,
           "center.branch.name": 1,
-          serviceCharge: 1,
-          totalAmount: 1,
-          amount: 1,
-          status: 1,
-          totalInstallment: 1,
-          installmentAmount: 1,
-          runningInstallment: 1,
-          installmentReceived: 1,
-          installmentShortage: 1,
         },
       },
     ]);
   }
-  return Loan.aggregate([
+  return Deposit.aggregate([
     {
       $lookup: {
         from: "clients",
@@ -280,20 +226,6 @@ const listAllLoans = (q, s, l) => {
     {
       $unwind: {
         path: "$nominee",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: "clients",
-        localField: "granter",
-        foreignField: "_id",
-        as: "granter",
-      },
-    },
-    {
-      $unwind: {
-        path: "$granter",
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -331,7 +263,7 @@ const listAllLoans = (q, s, l) => {
       $project: {
         _id: 1,
         "client.name": 1,
-        "granter.name": 1,
+        "client.avatar": 1,
         "nominee.name": 1,
         "center.name": 1,
         "center.branch.name": 1,
@@ -351,29 +283,30 @@ const listAllLoans = (q, s, l) => {
 
 const getTotalMatch = (q) => {
   if (q) {
-    return Loan.aggregate([
+    return Deposit.aggregate([
       { $match: { branch: ObjectId(q) } },
       { $count: "total" },
     ]);
   }
-  return Loan.aggregate([{ $count: "total" }]);
+  return Deposit.aggregate([{ $count: "total" }]);
 };
 
-const storeLoan = (data) => {
-  const loan = new Loan(data);
-  return loan.save();
+const storeDeposit = (data) => {
+  const deposit = new Deposit(data);
+  return deposit.save();
 };
 
-const updateOneLoan = (id, data) => Loan.updateOne({ _id: id }, { ...data });
+const updateOneDeposit = (id, data) =>
+  Deposit.updateOne({ _id: id }, { ...data });
 
-const getById = (id) => Loan.findById(id);
+const getById = (id) => Deposit.findById(id);
 
 const getClientById = (id) => Client.findById(id);
 
-const deleteLoan = (id) => Loan.remove({ _id: id });
+const deleteDeposit = (id) => Deposit.remove({ _id: id });
 
 const findById = async (id) =>
-  Loan.aggregate([
+  Deposit.aggregate([
     { $match: { _id: ObjectId(id) } },
     {
       $lookup: {
@@ -405,20 +338,6 @@ const findById = async (id) =>
     },
     {
       $lookup: {
-        from: "clients",
-        localField: "granter",
-        foreignField: "_id",
-        as: "granter",
-      },
-    },
-    {
-      $unwind: {
-        path: "$granter",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
         from: "centers",
         localField: "center",
         foreignField: "_id",
@@ -434,7 +353,7 @@ const findById = async (id) =>
     {
       $lookup: {
         from: "branches",
-        localField: "branch",
+        localField: "center.branch",
         foreignField: "_id",
         as: "center.branch",
       },
@@ -445,10 +364,94 @@ const findById = async (id) =>
         preserveNullAndEmptyArrays: true,
       },
     },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "client.branch",
+        foreignField: "_id",
+        as: "client.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "centers",
+        localField: "client.center",
+        foreignField: "_id",
+        as: "client.center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "client.center.branch",
+        foreignField: "_id",
+        as: "client.center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "nominee.branch",
+        foreignField: "_id",
+        as: "nominee.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "centers",
+        localField: "nominee.center",
+        foreignField: "_id",
+        as: "nominee.center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "nominee.center.branch",
+        foreignField: "_id",
+        as: "nominee.center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
   ]);
 
 const search = async (q) =>
-  Loan.aggregate([
+  Deposit.aggregate([
     {
       $match: {
         $or: [
@@ -488,20 +491,6 @@ const search = async (q) =>
     },
     {
       $lookup: {
-        from: "clients",
-        localField: "granter",
-        foreignField: "_id",
-        as: "granter",
-      },
-    },
-    {
-      $unwind: {
-        path: "$granter",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
         from: "centers",
         localField: "center",
         foreignField: "_id",
@@ -532,13 +521,13 @@ const search = async (q) =>
 
 module.exports = {
   getTotalMatch,
-  getAllLoans,
-  storeLoan,
+  getAllDeposits,
+  storeDeposit,
   findById,
-  updateOneLoan,
+  updateOneDeposit,
   getById,
-  deleteLoan,
+  deleteDeposit,
   search,
   getClientById,
-  listAllLoans,
+  listAllDeposits,
 };

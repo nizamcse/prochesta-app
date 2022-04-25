@@ -59,7 +59,7 @@ const depositSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["DRAFTED", "UNDER REVIEW", "APPROVED", "DISBURSED"],
+    enum: ["DRAFTED", "UNDER REVIEW", "APPROVED"],
     required: true,
     default: "DRAFTED",
   },
