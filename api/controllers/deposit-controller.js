@@ -69,7 +69,6 @@ const updateOne = async (req, res) => {
   const applicant = await getClientById(req.body.client);
   const { center } = applicant;
   const data = {
-    _id: mongoose.Types.ObjectId(),
     client: req.body.client,
     nominee: req.body.nominee,
     center,
