@@ -12,6 +12,8 @@ const {
   listAllLoans,
 } = require("../services/loan-service");
 
+const statuses = ["DRAFTED", "UNDER REVIEW", "APPROVED", "DISBURSED"];
+
 const index = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit, 10) || 1000;
@@ -191,8 +193,39 @@ const searchLoan = async (req, res) => {
   }
 };
 
+const updateStatus = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const loan = await findById(id);
+    const { status } = loan;
+    const ind = statuses.indexOf(status);
+    if (ind > -1 && ind < statuses.length - 1) {
+      const s = statuses[ind + 1];
+      await updateOneLoan(id, { status: s });
+      const l = await findById(id);
+      return res.status(200).json({
+        results: l[0] || {},
+        message: "Successfully updated status",
+        _id: id,
+      });
+    }
+  } catch (e) {
+    return res.status(e.statusCode || 500).json({
+      message: e.message,
+    });
+  }
+};
+
 /**
  https://drive.google.com/uc?id=12SRDZInmm4DYiPkG_dNi_cKsDOkLcPv5&export=download
  */
 
-module.exports = { index, store, updateOne, deleteOne, findOne, searchLoan };
+module.exports = {
+  index,
+  store,
+  updateOne,
+  deleteOne,
+  findOne,
+  searchLoan,
+  updateStatus,
+};
