@@ -80,15 +80,17 @@ const store = async (req, res) => {
 const updateOne = async (req, res) => {
   const { amount, serviceCharge, installmentType, loanDuration } = req.body;
   const totalAmount =
-    (parseInt(amount, 10) * parseInt(serviceCharge, 10)) / 100;
-  let totalInstallment =
-    parseInt(loanDuration, 10) * 12 * 365 - 6 * parseInt(loanDuration, 10) * 12;
+    (parseInt(amount, 10) * parseInt(serviceCharge, 10)) / 100 +
+    parseInt(amount, 10);
+  let totalInstallment = Math.ceil(
+    parseInt(loanDuration, 10) * 12 * 365 - 6 * parseInt(loanDuration, 10) * 12
+  );
   if (installmentType === "WEEKLY") {
-    totalInstallment = (parseInt(loanDuration, 10) * 365) / 7;
+    totalInstallment = Math.ceil((parseInt(loanDuration, 10) * 365) / 7);
   } else if (installmentType === "MONTHLY") {
-    totalInstallment = parseInt(loanDuration, 10) * 12;
+    totalInstallment = Math.ceil(parseInt(loanDuration, 10) * 12);
   }
-  const installmentAmount = totalAmount / totalInstallment;
+  const installmentAmount = Math.ceil(totalAmount / totalInstallment);
   const applicant = await getClientById(req.body.client);
   const { center } = applicant;
   const data = {
