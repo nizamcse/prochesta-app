@@ -7,6 +7,7 @@ const {
   updateOne,
   deleteOne,
   findOne,
+  updateStatus,
 } = require("../controllers/loan-controller");
 
 router.get("/", index);
@@ -16,6 +17,8 @@ router.post("/", store);
 router.get("/:id", findOne);
 
 router.patch("/:id", updateOne);
+
+router.patch("/update-status/:id", updateStatus);
 
 router.delete("/:id", deleteOne);
 

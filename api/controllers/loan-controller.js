@@ -197,7 +197,7 @@ const updateStatus = async (req, res) => {
   const { id } = req.params;
   try {
     const loan = await findById(id);
-    const { status } = loan;
+    const { status } = loan[0];
     const ind = statuses.indexOf(status);
     if (ind > -1 && ind < statuses.length - 1) {
       const s = statuses[ind + 1];
@@ -209,6 +209,9 @@ const updateStatus = async (req, res) => {
         _id: id,
       });
     }
+    return res.status(500).json({
+      message: "Unknown error.",
+    });
   } catch (e) {
     return res.status(e.statusCode || 500).json({
       message: e.message,
