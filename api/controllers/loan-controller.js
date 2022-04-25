@@ -9,6 +9,7 @@ const {
   deleteLoan,
   updateOneLoan,
   search,
+  getClientById,
 } = require("../services/loan-service");
 
 const index = async (req, res) => {
@@ -43,12 +44,14 @@ const store = async (req, res) => {
     totalInstallment = Math.ceil(parseInt(loanDuration, 10) * 12);
   }
   const installmentAmount = Math.ceil(totalAmount / totalInstallment);
+  const applicant = await getClientById(req.body.client);
+  const { center } = applicant;
   const data = {
     _id: mongoose.Types.ObjectId(),
     client: req.body.client,
     nominee: req.body.nominee,
     granter: req.body.granter,
-    center: req.body.center,
+    center,
     granterRelation: req.body.granterRelation,
     nomineeRelation: req.body.nomineeRelation,
     installmentType,
@@ -86,12 +89,13 @@ const updateOne = async (req, res) => {
     totalInstallment = parseInt(loanDuration, 10) * 12;
   }
   const installmentAmount = totalAmount / totalInstallment;
+  const applicant = await getClientById(req.body.client);
+  const { center } = applicant;
   const data = {
-    _id: mongoose.Types.ObjectId(),
-    client: req.body.client,
+    client: applicant.client,
     nominee: req.body.nominee,
     granter: req.body.granter,
-    center: req.body.center,
+    center,
     granterRelation: req.body.granterRelation,
     nomineeRelation: req.body.nomineeRelation,
     installmentType,

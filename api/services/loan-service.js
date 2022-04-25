@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Loan = require("../models/loan");
+const Client = require("../models/client");
 
 const { ObjectId } = mongoose.Types;
 const getAllLoans = (q, s, l) => {
@@ -174,6 +175,8 @@ const updateOneLoan = (id, data) => Loan.updateOne({ _id: id }, { ...data });
 
 const getById = (id) => Loan.findById(id);
 
+const getClientById = (id) => Client.findById(id);
+
 const deleteLoan = (id) => Loan.remove({ _id: id });
 
 const findById = async (id) =>
@@ -343,4 +346,5 @@ module.exports = {
   getById,
   deleteLoan,
   search,
+  getClientById,
 };
