@@ -15,7 +15,6 @@ const index = async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 100;
     const skip = parseInt(req.query.offset, 10) || 0;
     const query = req.query.branch || "";
-    console.log(query);
     const totalMatch = await getTotalMatch(query);
     const centeres = await getAllCenters(query, skip, limit);
     return res.status(200).json({

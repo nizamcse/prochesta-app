@@ -24,6 +24,12 @@ const employeeSchema = mongoose.Schema({
     ref: "Branch",
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["DRAFTED", "UNDER REVIEW", "APPROVED"],
+    required: true,
+    default: "DRAFTED",
+  },
 });
 
 module.exports = mongoose.model("Employee", employeeSchema);

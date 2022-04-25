@@ -14,6 +14,7 @@ const branchRoute = require("./api/routes/branch");
 const centerRoute = require("./api/routes/center");
 const employeeRoute = require("./api/routes/employee");
 const clientRoute = require("./api/routes/clients");
+const loanRoute = require("./api/routes/loans");
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -47,6 +48,7 @@ app.use("/api/branches", branchRoute);
 app.use("/api/centers", centerRoute);
 app.use("/api/employees", employeeRoute);
 app.use("/api/clients", clientRoute);
+app.use("/api/loans", loanRoute);
 
 app.use((req, resp, next) => {
   const error = new Error("Not Found");
