@@ -141,7 +141,7 @@ const getAllLoans = (q, s, l) => {
     {
       $lookup: {
         from: "branches",
-        localField: "branch",
+        localField: "center.branch",
         foreignField: "_id",
         as: "center.branch",
       },
