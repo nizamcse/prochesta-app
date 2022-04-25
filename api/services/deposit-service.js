@@ -84,6 +84,34 @@ const getAllDeposits = (q, s, l) => {
     },
     {
       $lookup: {
+        from: "centers",
+        localField: "client.center",
+        foreignField: "_id",
+        as: "client.center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "client.center.branch",
+        foreignField: "_id",
+        as: "client.center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
         from: "clients",
         localField: "nominee",
         foreignField: "_id",
@@ -149,20 +177,6 @@ const listAllDeposits = (q, s, l) => {
       },
       {
         $lookup: {
-          from: "clients",
-          localField: "nominee",
-          foreignField: "_id",
-          as: "nominee",
-        },
-      },
-      {
-        $unwind: {
-          path: "$nominee",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $lookup: {
           from: "centers",
           localField: "center",
           foreignField: "_id",
@@ -178,7 +192,7 @@ const listAllDeposits = (q, s, l) => {
       {
         $lookup: {
           from: "branches",
-          localField: "branch",
+          localField: "center.branch",
           foreignField: "_id",
           as: "center.branch",
         },
@@ -189,15 +203,106 @@ const listAllDeposits = (q, s, l) => {
           preserveNullAndEmptyArrays: true,
         },
       },
-      { $skip: s },
-      { $limit: l },
       {
-        $project: {
-          _id: 1,
-          "client.name": 1,
-          "center.branch.name": 1,
+        $lookup: {
+          from: "centers",
+          localField: "client.center",
+          foreignField: "_id",
+          as: "client.center",
         },
       },
+      {
+        $unwind: {
+          path: "$client.center",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "client.center.branch",
+          foreignField: "_id",
+          as: "client.center.branch",
+        },
+      },
+      {
+        $unwind: {
+          path: "$client.center.branch",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "client.branch",
+          foreignField: "_id",
+          as: "client.branch",
+        },
+      },
+      {
+        $unwind: {
+          path: "$client.branch",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "nominee",
+          foreignField: "_id",
+          as: "nominee",
+        },
+      },
+      {
+        $unwind: {
+          path: "$nominee",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "centers",
+          localField: "nominee.center",
+          foreignField: "_id",
+          as: "nominee.center",
+        },
+      },
+      {
+        $unwind: {
+          path: "$nominee.center",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "nominee.center.branch",
+          foreignField: "_id",
+          as: "nominee.center.branch",
+        },
+      },
+      {
+        $unwind: {
+          path: "$nominee.center.branch",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "branches",
+          localField: "nominee.branch",
+          foreignField: "_id",
+          as: "nominee.branch",
+        },
+      },
+      {
+        $unwind: {
+          path: "$nominee.branch",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      { $skip: s },
+      { $limit: l },
     ]);
   }
   return Deposit.aggregate([
@@ -212,20 +317,6 @@ const listAllDeposits = (q, s, l) => {
     {
       $unwind: {
         path: "$client",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: "clients",
-        localField: "nominee",
-        foreignField: "_id",
-        as: "nominee",
-      },
-    },
-    {
-      $unwind: {
-        path: "$nominee",
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -254,6 +345,104 @@ const listAllDeposits = (q, s, l) => {
     {
       $unwind: {
         path: "$center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "centers",
+        localField: "client.center",
+        foreignField: "_id",
+        as: "client.center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "client.center.branch",
+        foreignField: "_id",
+        as: "client.center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "client.branch",
+        foreignField: "_id",
+        as: "client.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$client.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "clients",
+        localField: "nominee",
+        foreignField: "_id",
+        as: "nominee",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "centers",
+        localField: "nominee.center",
+        foreignField: "_id",
+        as: "nominee.center",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.center",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "nominee.center.branch",
+        foreignField: "_id",
+        as: "nominee.center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.center.branch",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: "branches",
+        localField: "nominee.branch",
+        foreignField: "_id",
+        as: "nominee.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$nominee.branch",
         preserveNullAndEmptyArrays: true,
       },
     },
