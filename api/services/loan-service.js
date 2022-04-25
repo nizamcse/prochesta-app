@@ -423,9 +423,15 @@ const findById = async (id) =>
     {
       $lookup: {
         from: "branches",
-        localField: "branch",
+        localField: "center.branch",
         foreignField: "_id",
         as: "center.branch",
+      },
+    },
+    {
+      $unwind: {
+        path: "$center.branch",
+        preserveNullAndEmptyArrays: true,
       },
     },
     {
