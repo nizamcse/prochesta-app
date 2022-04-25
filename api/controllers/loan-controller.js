@@ -2,7 +2,6 @@
 const mongoose = require("mongoose");
 
 const {
-  getAllLoans,
   getTotalMatch,
   storeLoan,
   findById,
@@ -10,6 +9,7 @@ const {
   updateOneLoan,
   search,
   getClientById,
+  listAllLoans,
 } = require("../services/loan-service");
 
 const index = async (req, res) => {
@@ -18,7 +18,7 @@ const index = async (req, res) => {
     const skip = parseInt(req.query.offset, 10) || 0;
     const branch = req.query.branch || "";
     const totalMatch = await getTotalMatch(branch);
-    const loans = await getAllLoans(branch, skip, limit);
+    const loans = await listAllLoans(branch, skip, limit);
     return res.status(200).json({
       results: loans,
       total: totalMatch[0] && totalMatch[0].total ? totalMatch[0].total : 0,
