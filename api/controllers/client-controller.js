@@ -37,11 +37,11 @@ const store = async (req, res) => {
     center: req.body.center,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob,
-    father_name: req.body.fatherName,
-    mother_name: req.body.motherName,
-    present_address: req.body.presentAddress,
-    permanent_address: req.body.permanentAddress,
+    dob: new Date(req.body.dob).toISOString(),
+    father_name: req.body.father_name,
+    mother_name: req.body.mother_name,
+    present_address: req.body.present_address,
+    permanent_address: req.body.permanent_address,
   };
   try {
     const client = await storeClient(data);
@@ -63,11 +63,11 @@ const updateOne = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob,
-    father_name: req.body.fatherName,
-    mother_name: req.body.motherName,
-    present_address: req.body.presentAddress,
-    permanent_address: req.body.permanentAddress,
+    dob: new Date(req.body.dob).toISOString(),
+    father_name: req.body.father_name,
+    mother_name: req.body.mother_name,
+    present_address: req.body.present_address,
+    permanent_address: req.body.permanent_address,
   };
   const { id } = req.params;
   try {
