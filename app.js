@@ -17,6 +17,7 @@ const clientRoute = require("./api/routes/clients");
 const loanRoute = require("./api/routes/loans");
 const depositeRoute = require("./api/routes/deposit");
 const psRoute = require("./api/routes/ps-route");
+const savingsRoute = require("./api/routes/savings");
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -53,6 +54,7 @@ app.use("/api/clients", clientRoute);
 app.use("/api/loans", loanRoute);
 app.use("/api/deposits", depositeRoute);
 app.use("/api/pension-schemes", psRoute);
+app.use("/api/savings", savingsRoute);
 
 app.use((req, resp, next) => {
   const error = new Error("Not Found");
