@@ -87,6 +87,7 @@ const updateOne = async (req, res) => {
       results: deposit[0] || {},
       message: "Successfully updated deposit",
       _id: id,
+      date: { dr: Date(req.body.date), r: Date(req.body.date) },
     });
   } catch (e) {
     if (e.message.indexOf("duplicate key error") !== -1)
