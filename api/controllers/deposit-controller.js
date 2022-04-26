@@ -47,7 +47,7 @@ const store = async (req, res) => {
     interest: req.body.interest,
     interestAmount: totalAmount,
     billingCycle: req.body.billingCycle,
-    openingDate: Date(req.body.date),
+    openingDate: Date(req.body.openingDate),
   };
   try {
     const deposit = await storeDeposit(data);
@@ -77,7 +77,7 @@ const updateOne = async (req, res) => {
     interest: req.body.interest,
     interestAmount: totalAmount,
     billingCycle: req.body.billingCycle,
-    openingDate: Date(req.body.date),
+    openingDate: Date(req.body.openingDate),
   };
   const { id } = req.params;
   try {
@@ -87,7 +87,6 @@ const updateOne = async (req, res) => {
       results: deposit[0] || {},
       message: "Successfully updated deposit",
       _id: id,
-      date: { dr: Date(req.body.date), r: Date(req.body.date) },
     });
   } catch (e) {
     if (e.message.indexOf("duplicate key error") !== -1)
