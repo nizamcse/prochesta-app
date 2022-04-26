@@ -36,21 +36,7 @@ const pensionSchema = mongoose.Schema({
     enum: ["DAILY", "WEEKLY", "MONTHLY"],
     required: true,
   },
-  installmentDuration: {
-    type: Number,
-    required: true,
-  },
   amount: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  serviceCharge: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  totalAmount: {
     type: Number,
     required: true,
     default: 0,
@@ -89,11 +75,6 @@ const pensionSchema = mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
-  },
-  disbursementDate: {
-    type: Date,
-    required: true,
-    default: new Date("01-01-1970"),
   },
   nextInstallmentDate: {
     type: Date,
