@@ -150,7 +150,6 @@ const searchClient = async (req, res) => {
     });
   }
 };
-
 /**
  https://drive.google.com/uc?id=12SRDZInmm4DYiPkG_dNi_cKsDOkLcPv5&export=download
  */
