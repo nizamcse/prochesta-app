@@ -233,25 +233,6 @@ const listAllLoans = (q, s, l) => {
       },
       { $skip: s },
       { $limit: l },
-      {
-        $project: {
-          _id: 1,
-          "client.name": 1,
-          "granter.name": 1,
-          "nominee.name": 1,
-          "center.name": 1,
-          "center.branch.name": 1,
-          serviceCharge: 1,
-          totalAmount: 1,
-          amount: 1,
-          status: 1,
-          totalInstallment: 1,
-          installmentAmount: 1,
-          runningInstallment: 1,
-          installmentReceived: 1,
-          installmentShortage: 1,
-        },
-      },
     ]);
   }
   return Loan.aggregate([
@@ -327,25 +308,6 @@ const listAllLoans = (q, s, l) => {
     },
     { $skip: s },
     { $limit: l },
-    {
-      $project: {
-        _id: 1,
-        "client.name": 1,
-        "granter.name": 1,
-        "nominee.name": 1,
-        "center.name": 1,
-        "center.branch.name": 1,
-        serviceCharge: 1,
-        totalAmount: 1,
-        amount: 1,
-        status: 1,
-        totalInstallment: 1,
-        installmentAmount: 1,
-        runningInstallment: 1,
-        installmentReceived: 1,
-        installmentShortage: 1,
-      },
-    },
   ]);
 };
 
