@@ -32,7 +32,7 @@ const store = async (req, res) => {
       data.push({
         _id: mongoose.Types.ObjectId(),
         amount: collection[i].amount,
-        installmentDate: new Date(collection[i].installmentDate),
+        installmentDate: new Date(collection[i].installmentDate).toISOString(),
         loan: new Date(collection[i].loan),
       });
     }
