@@ -33,8 +33,6 @@ const index = async (req, res) => {
 };
 
 const store = async (req, res) => {
-  const { amount, interest } = req.body;
-  const totalAmount = (parseInt(amount, 10) * parseInt(interest, 10)) / 100;
   const applicant = await getClientById(req.body.client);
   const { center } = applicant;
   const data = {
@@ -61,8 +59,6 @@ const store = async (req, res) => {
 };
 
 const updateOne = async (req, res) => {
-  const { amount, interest } = req.body;
-  const totalAmount = (parseInt(amount, 10) * parseInt(interest, 10)) / 100;
   const applicant = await getClientById(req.body.client);
   const { center } = applicant;
   const data = {
