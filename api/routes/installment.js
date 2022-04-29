@@ -4,7 +4,6 @@ const router = express.Router();
 const {
   index,
   store,
-  updateOne,
   deleteOne,
   findOne,
 } = require("../controllers/installment-controller");
@@ -14,8 +13,6 @@ router.get("/", index);
 router.post("/", store);
 
 router.get("/:id", findOne);
-
-router.patch("/:id", updateOne);
 
 router.delete("/:id", deleteOne);
 
