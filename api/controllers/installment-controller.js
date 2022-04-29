@@ -26,7 +26,7 @@ const index = async (req, res) => {
 
 const store = async (req, res) => {
   const { collection } = req.body;
-  if (Array.isArray(collection)) {
+  try {
     const data = [];
     for (let i = 0; i < collection.length; i += 1) {
       data.push({
@@ -36,39 +36,28 @@ const store = async (req, res) => {
         loan: new Date(collection[i].loan),
       });
     }
-    try {
-      await insertMany(data);
-      return res.status(200).json({
-        message: "Successfully created installments",
-      });
-    } catch (e) {
-      if (e.message.indexOf("duplicate key error") !== -1)
-        return res.status(409).json({
-          message: "Validation failed.",
-          errors: [{ name: `"${data.name}" Already exist.` }],
-        });
-      const errors = [];
-      if (e.errors) {
-        const keys = Object.keys(e.errors || {});
-        for (let i = 0; i < keys.length; i += 1) {
-          errors.push({ [keys[i]]: e.errors[keys[i]].message });
-        }
+    await insertMany(data);
+    return res.status(200).json({
+      message: "Successfully created installments",
+    });
+  } catch (e) {
+    const errors = [];
+    if (e.errors) {
+      const keys = Object.keys(e.errors || {});
+      for (let i = 0; i < keys.length; i += 1) {
+        errors.push({ [keys[i]]: e.errors[keys[i]].message });
       }
-      if (errors.length)
-        return res.status(400).json({
-          message: "Validation failed.",
-          errors,
-        });
-
-      return res.status(500).json({
-        message: e.message,
-      });
     }
+    if (errors.length)
+      return res.status(400).json({
+        message: "Validation failed.",
+        errors,
+      });
+
+    return res.status(500).json({
+      message: e.message,
+    });
   }
-  return res.status(500).json({
-    message: "Unknown error",
-    collection,
-  });
 };
 
 const deleteOne = async (req, res) => {
