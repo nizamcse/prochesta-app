@@ -32,7 +32,7 @@ const store = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob,
+    dob: new Date(req.body.dob).toISOString(),
   };
   try {
     const employee = await storeEmployee(data);
@@ -54,7 +54,7 @@ const updateOne = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: req.body.dob,
+    dob: new Date(req.body.dob).toISOString(),
   };
   const { id } = req.params;
   try {
