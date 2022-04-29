@@ -67,6 +67,7 @@ const store = async (req, res) => {
   }
   return res.status(500).json({
     message: "Unknown error",
+    collection,
   });
 };
 
