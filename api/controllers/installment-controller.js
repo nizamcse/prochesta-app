@@ -34,7 +34,7 @@ const store = async (req, res) => {
     // eslint-disable-next-line no-unreachable-loop
     for (let i = 0; i < collection.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
-      const loan = await Loan.findById(collection[i].loan);
+      const loan = await Loan.findById(collection[i].loanId);
       if (loan[0]) {
         const iDate =
           loan[0]?.currentInstallmentDate || new Date().toISOString();
@@ -68,7 +68,6 @@ const store = async (req, res) => {
     });
   }
 };
-
 const deleteOne = async (req, res) => {
   const { id } = req.params;
   try {
