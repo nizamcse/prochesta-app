@@ -28,7 +28,7 @@ const index = async (req, res) => {
 };
 
 const store = async (req, res) => {
-  const { collection } = req.body;
+  const collection = JSON.parse(req.body.collection);
   const data = [];
   try {
     // eslint-disable-next-line no-unreachable-loop
@@ -58,7 +58,7 @@ const store = async (req, res) => {
     await insertMany(data);
     return res.status(200).json({
       message: "Successfully created installments",
-      collection,
+      data,
     });
   } catch (e) {
     return res.status(500).json({
