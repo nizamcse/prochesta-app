@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const mongoose = require("mongoose");
 
 const {
@@ -6,6 +7,8 @@ const {
   insertMany,
   getAllInstallments,
 } = require("../services/installment-service");
+
+const Loan = require("../services/loan-service");
 
 const index = async (req, res) => {
   try {
@@ -29,11 +32,21 @@ const store = async (req, res) => {
   try {
     const data = [];
     for (let i = 0; i < collection.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const loan = await Loan.findById(collection[i].loan);
+      const iDate = loan[0].currentInstallmentDate;
+      const cDate = new Date(collection[i].installmentDate).toISOString();
+      const diffAmount =
+        parseInt(loan[0].installmentAmount, 10) -
+        parseInt(collection[i].amount, 10);
       data.push({
         _id: mongoose.Types.ObjectId(),
-        amount: collection[i].amount,
-        installmentDate: new Date(collection[i].installmentDate).toISOString(),
-        loan: collection[i].loan,
+        amount: loan[0].installmentAmount,
+        installmentDate: iDate,
+        loan: loan[0]._id,
+        collectedDate: cDate,
+        installmentReceived: collection[i].amount,
+        installmentShortage: diffAmount > 0 ? diffAmount : 0,
       });
     }
     await insertMany(data);

@@ -33,6 +33,10 @@ const installmentSchema = mongoose.Schema(
       required: true,
       default: new Date(),
     },
+    isLate: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
