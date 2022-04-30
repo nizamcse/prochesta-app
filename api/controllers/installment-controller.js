@@ -29,12 +29,12 @@ const index = async (req, res) => {
 
 const store = async (req, res) => {
   const { collection } = req.body;
+  const data = [];
   try {
-    const data = [];
     for (let i = 0; i < collection.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const loan = await Loan.findById(collection[i].loan);
-      const iDate = loan[0].currentInstallmentDate;
+      const iDate = loan[0]?.currentInstallmentDate || new Date().toISOString();
       const cDate = new Date(collection[i].installmentDate).toISOString();
       const diffAmount =
         parseInt(loan[0].installmentAmount, 10) -
@@ -69,7 +69,7 @@ const store = async (req, res) => {
 
     return res.status(500).json({
       message: e.message,
-      collection,
+      collection: data,
     });
   }
 };
