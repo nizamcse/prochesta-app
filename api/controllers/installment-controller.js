@@ -53,17 +53,12 @@ const store = async (req, res) => {
           installmentReceived: collection[i].amount,
           installmentShortage: diffAmount > 0 ? diffAmount : 0,
         });
-        return res.status(200).json({
-          message: "Successfully created installments",
-          collection,
-        });
       }
-      return res.status(200).json({
-        message: "Could not create installments",
-        collection,
-        loan,
-      });
     }
+    return res.status(200).json({
+      message: "Successfully created installments",
+      collection,
+    });
   } catch (e) {
     const errors = [];
     if (e.errors) {
