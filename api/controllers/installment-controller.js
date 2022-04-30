@@ -35,7 +35,9 @@ const store = async (req, res) => {
       // eslint-disable-next-line no-await-in-loop
       const loan = await Loan.findById(collection[i].loan);
       const iDate = loan[0]?.currentInstallmentDate || new Date().toISOString();
-      const cDate = new Date(collection[i].installmentDate).toISOString();
+      const cDate =
+        new Date(collection[i].installmentDate).toISOString() ||
+        new Date().toISOString();
       console.log(iDate, cDate, collection[i].installmentDate);
       const diffAmount =
         parseInt(loan[0].installmentAmount, 10) -
@@ -53,7 +55,7 @@ const store = async (req, res) => {
     // await insertMany(data);
     return res.status(200).json({
       message: "Successfully created installments",
-      data
+      data,
     });
   } catch (e) {
     const errors = [];
