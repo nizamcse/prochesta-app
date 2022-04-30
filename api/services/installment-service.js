@@ -1,16 +1,9 @@
 const Installment = require("../models/installment-collection");
 
 const getAllInstallments = (q, s, l) =>
-  Installment.aggregate([
-    { $match: { name: { $regex: q, $options: "i" } } },
-    { $skip: s },
-    { $limit: l },
-  ]);
-const getTotalMatch = (q) =>
-  Installment.aggregate([
-    { $match: { name: { $regex: q, $options: "i" } } },
-    { $count: "total" },
-  ]);
+  Installment.aggregate([{ $skip: s }, { $limit: l }]);
+// eslint-disable-next-line no-unused-vars
+const getTotalMatch = (_q) => Installment.aggregate([{ $count: "total" }]);
 
 const matchedRecords = (q) =>
   Installment.aggregate([{ $match: { name: q } }, { $count: "total" }]);
