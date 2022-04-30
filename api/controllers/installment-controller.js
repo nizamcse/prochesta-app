@@ -55,24 +55,12 @@ const store = async (req, res) => {
         });
       }
     }
+    await insertMany(data);
     return res.status(200).json({
       message: "Successfully created installments",
       collection,
     });
   } catch (e) {
-    const errors = [];
-    if (e.errors) {
-      const keys = Object.keys(e.errors || {});
-      for (let i = 0; i < keys.length; i += 1) {
-        errors.push({ [keys[i]]: e.errors[keys[i]].message });
-      }
-    }
-    if (errors.length)
-      return res.status(400).json({
-        message: "Validation failed.",
-        errors,
-      });
-
     return res.status(500).json({
       message: e.message,
       collection: data,
