@@ -31,31 +31,39 @@ const store = async (req, res) => {
   const { collection } = req.body;
   const data = [];
   try {
+    // eslint-disable-next-line no-unreachable-loop
     for (let i = 0; i < collection.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       const loan = await Loan.findById(collection[i].loan);
-      const iDate = loan[0]?.currentInstallmentDate || new Date().toISOString();
-      const cDate =
-        new Date(collection[i].installmentDate).toISOString() ||
-        new Date().toISOString();
-      const diffAmount =
-        parseInt(loan[0].installmentAmount, 10) -
-        parseInt(collection[i].amount, 10);
-      data.push({
-        _id: mongoose.Types.ObjectId(),
-        amount: loan[0].installmentAmount,
-        installmentDate: iDate,
-        loan: loan[0]._id,
-        collectedDate: cDate,
-        installmentReceived: collection[i].amount,
-        installmentShortage: diffAmount > 0 ? diffAmount : 0,
+      if (loan[0]) {
+        const iDate =
+          loan[0]?.currentInstallmentDate || new Date().toISOString();
+        const cDate =
+          new Date(collection[i].installmentDate).toISOString() ||
+          new Date().toISOString();
+        const diffAmount =
+          parseInt(loan[0].installmentAmount, 10) -
+          parseInt(collection[i].amount, 10);
+        data.push({
+          _id: mongoose.Types.ObjectId(),
+          amount: loan[0].installmentAmount,
+          installmentDate: iDate,
+          loan: loan[0]._id,
+          collectedDate: cDate,
+          installmentReceived: collection[i].amount,
+          installmentShortage: diffAmount > 0 ? diffAmount : 0,
+        });
+        return res.status(200).json({
+          message: "Successfully created installments",
+          collection,
+        });
+      }
+      return res.status(200).json({
+        message: "Could not create installments",
+        collection,
+        loan,
       });
     }
-    await insertMany(data);
-    return res.status(200).json({
-      message: "Successfully created installments",
-      collection,
-    });
   } catch (e) {
     const errors = [];
     if (e.errors) {
