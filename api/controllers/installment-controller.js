@@ -36,6 +36,7 @@ const store = async (req, res) => {
       const loan = await Loan.findById(collection[i].loan);
       const iDate = loan[0]?.currentInstallmentDate || new Date().toISOString();
       const cDate = new Date(collection[i].installmentDate).toISOString();
+      console.log(iDate, cDate, collection[i].installmentDate);
       const diffAmount =
         parseInt(loan[0].installmentAmount, 10) -
         parseInt(collection[i].amount, 10);
@@ -49,9 +50,10 @@ const store = async (req, res) => {
         installmentShortage: diffAmount > 0 ? diffAmount : 0,
       });
     }
-    await insertMany(data);
+    // await insertMany(data);
     return res.status(200).json({
       message: "Successfully created installments",
+      data
     });
   } catch (e) {
     const errors = [];
