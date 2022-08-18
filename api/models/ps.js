@@ -76,16 +76,6 @@ const pensionSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
-  billingCycle: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  psDuration: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
   nextInstallmentDate: {
     type: Date,
     required: true,

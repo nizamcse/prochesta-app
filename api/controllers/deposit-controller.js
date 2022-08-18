@@ -46,6 +46,7 @@ const store = async (req, res) => {
     amount: req.body.amount,
     interest: req.body.interest,
     interestAmount: totalAmount,
+    billingCycle: req.body.billingCycle,
     openingDate: new Date(req.body.openingDate).toISOString(),
   };
   try {
@@ -75,6 +76,7 @@ const updateOne = async (req, res) => {
     amount: req.body.amount,
     interest: req.body.interest,
     interestAmount: totalAmount,
+    billingCycle: req.body.billingCycle,
     openingDate: new Date(req.body.openingDate).toISOString(),
   };
   const { id } = req.params;

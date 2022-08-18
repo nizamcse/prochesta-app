@@ -51,6 +51,12 @@ const depositSchema = mongoose.Schema({
     required: true,
     default: new Date("01-01-1970"),
   },
+  billingCycle: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 31,
+  },
   status: {
     type: String,
     enum: ["DRAFTED", "UNDER REVIEW", "APPROVED"],

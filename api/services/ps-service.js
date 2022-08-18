@@ -430,7 +430,7 @@ const listAllPs = (q, s, l) => {
       {
         $lookup: {
           from: "branches",
-          localField: "center.branch",
+          localField: "branch",
           foreignField: "_id",
           as: "center.branch",
         },
@@ -575,7 +575,7 @@ const listAllPs = (q, s, l) => {
     {
       $lookup: {
         from: "branches",
-        localField: "center.branch",
+        localField: "branch",
         foreignField: "_id",
         as: "center.branch",
       },
@@ -746,7 +746,7 @@ const findById = async (id) =>
     {
       $lookup: {
         from: "branches",
-        localField: "center.branch",
+        localField: "branch",
         foreignField: "_id",
         as: "center.branch",
       },

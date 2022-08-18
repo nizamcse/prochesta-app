@@ -32,14 +32,15 @@ const store = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: new Date(req.body.dob).toISOString(),
+    dob: req.body.dob,
   };
   try {
     const employee = await storeEmployee(data);
-    const getEmployee = await findById(employee.id);
+    const getEmployee = await findById(employee._id);
     return res.status(200).json({
       results: getEmployee[0] || null,
       message: "Successfully created employee",
+      
     });
   } catch (e) {
     return res.status(500).json({
@@ -54,7 +55,7 @@ const updateOne = async (req, res) => {
     branch: req.body.branch,
     phone: req.body.phone,
     nid: req.body.nid,
-    dob: new Date(req.body.dob).toISOString(),
+    dob: req.body.dob,
   };
   const { id } = req.params;
   try {

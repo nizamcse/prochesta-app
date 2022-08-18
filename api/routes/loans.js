@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 const {
@@ -8,18 +8,20 @@ const {
   deleteOne,
   findOne,
   updateStatus,
-} = require("../controllers/loan-controller");
+  revokeStatus
+} = require('../controllers/loan-controller');
 
-router.get("/", index);
+router.get('/', index);
 
-router.post("/", store);
+router.post('/', store);
 
-router.get("/:id", findOne);
+router.get('/:id', findOne);
 
-router.patch("/:id", updateOne);
+router.patch('/:id', updateOne);
 
-router.patch("/update-status/:id", updateStatus);
+router.patch('/update-status/:id', updateStatus);
+router.patch('/revoke-status/:id', revokeStatus);
 
-router.delete("/:id", deleteOne);
+router.delete('/:id', deleteOne);
 
 module.exports = router;

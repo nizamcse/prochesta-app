@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 const userSchema = mongoose.Schema(
@@ -11,22 +11,29 @@ const userSchema = mongoose.Schema(
       required: true,
       unique: true,
       match:
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
-    password: { type: String, required: true, select: false },
+    password: { type: String, required: true },
     type: {
       type: String,
-      enum: ["ADMIN", "USER"],
+      enum: ['ADMIN', 'MANAGER', 'FIELD WORKER'],
       required: true,
-      default: "USER",
+      default: 'FIELD WORKER'
     },
+    employee: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Employee',
+      required: true
+    },
+    centers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Center' }],
+    branches: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Branch' }]
   },
   { timestamps: true }
 );
 
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
   const user = this;
-  if (this.isModified("password") || this.isNew) {
+  if (this.isModified('password') || this.isNew) {
     bcrypt.genSalt(saltRounds, (err) => {
       if (err) {
         return next(err);
@@ -43,7 +50,8 @@ userSchema.pre("save", function (next) {
   }
 });
 
-userSchema.methods.comparePassword = (passw, cb) => {
+userSchema.methods.comparePassword = function (passw, cb) {
+  console.log(passw, this);
   bcrypt.compare(passw, this.password, (err, isMatch) => {
     if (err) {
       return cb(err);
@@ -52,4 +60,4 @@ userSchema.methods.comparePassword = (passw, cb) => {
   });
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

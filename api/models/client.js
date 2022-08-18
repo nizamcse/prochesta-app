@@ -1,54 +1,58 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const clientSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: {
     type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    minlength: [3, 'Center name should be minimum 3 character.']
   },
   father_name: {
     type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    minlength: [3, 'Center name should be minimum 3 character.']
   },
   mother_name: {
     type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    minlength: [3, 'Center name should be minimum 3 character.']
   },
   present_address: {
-    type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    city: { type: String },
+    word: { type: String },
+    local_area: { type: String },
+    holding_no: { type: String }
   },
   permanent_address: {
-    type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    city: { type: String },
+    word: { type: String },
+    local_area: { type: String },
+    holding_no: { type: String }
   },
   nid: {
     type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
+    minlength: [3, 'Center name should be minimum 3 character.']
   },
   dob: {
     type: Date,
     required: true,
-    default: new Date("01-01-1970"),
+    default: new Date('01-01-1970')
   },
   branch: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Branch",
-    required: true,
+    ref: 'Branch',
+    required: true
   },
   center: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Center",
-    required: true,
+    ref: 'Center',
+    required: true
   },
   avatar: {
     type: mongoose.Schema.Types.String,
-    required: false,
+    required: false
   },
   phone: {
     type: String,
-    minlength: [3, "Center name should be minimum 3 character."],
-  },
+    minlength: [3, 'Center name should be minimum 3 character.']
+  }
 });
 
-module.exports = mongoose.model("Client", clientSchema);
+module.exports = mongoose.model('Client', clientSchema);
